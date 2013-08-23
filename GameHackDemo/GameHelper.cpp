@@ -9,11 +9,34 @@ CGameHelper::CGameHelper( void )
     m_hGameHackDll = NULL;
     m_InstallWH = NULL;
     m_UnInstallWH = NULL;
+	m_SetConfigPath=NULL;
 }
 
 
 CGameHelper::~CGameHelper( void )
 {
+}
+
+
+DWORD CGameHelper::GetThreadIDByProcssID( DWORD dwProcessID )
+{
+	DWORD dwThreadID = -1;
+	THREADENTRY32 te32 = {sizeof( te32 )};
+	HANDLE hThreadSnap = CreateToolhelp32Snapshot( TH32CS_SNAPTHREAD, dwProcessID );
+	if ( Thread32First( hThreadSnap, &te32 ) )
+	{
+		do
+		{
+			if ( dwProcessID == te32.th32OwnerProcessID )
+			{
+				dwThreadID = te32.th32ThreadID;
+				break;
+			}
+		}
+		while ( Thread32Next( hThreadSnap, &te32 ) );
+	}
+
+	return dwThreadID;
 }
 
 BOOL CGameHelper::Start( CString sProName )
@@ -24,11 +47,12 @@ BOOL CGameHelper::Start( CString sProName )
     }
     
     DWORD dwPID = GetPidFromName( sProName );
-    if ( -1 == dwPID )
+	DWORD dwMainPID=GetThreadIDByProcssID(dwPID);
+    if ( -1 == dwMainPID )
     {
         return FALSE;
     }
-    return InstallHook( dwPID );
+    return InstallHook( dwMainPID );
 }
 
 BOOL CGameHelper::Stop()
@@ -84,7 +108,8 @@ BOOL CGameHelper::Init()
     {
         m_InstallWH = ( InstallWindowHook )GetProcAddress( m_hGameHackDll, "InstallWindowHook" );
         m_UnInstallWH = ( UnInstallWindowHook )GetProcAddress( m_hGameHackDll, "UnInstallWindowHook" );
-        if ( ( NULL != m_InstallWH ) && ( NULL != m_UnInstallWH ) )
+		m_SetConfigPath=(SetConfigPath)GetProcAddress(m_hGameHackDll,"SetConfigPath");
+        if ( ( NULL != m_InstallWH ) && ( NULL != m_UnInstallWH ) && (NULL!=m_SetConfigPath))
         {
             m_bInited = TRUE;
             return TRUE;
@@ -101,6 +126,7 @@ void CGameHelper::UnInit()
         m_hGameHackDll = NULL;
         m_InstallWH = NULL;
         m_UnInstallWH = NULL;
+		m_SetConfigPath=NULL;
         m_bInited = FALSE;
     }
 }
@@ -137,4 +163,12 @@ BOOL CGameHelper::UnInstallHook()
 BOOL CGameHelper::IsInited()
 {
     return m_bInited;
+}
+
+void CGameHelper::SetCfgPath( LPCTSTR lpszPath )
+{
+	if (NULL!=m_SetConfigPath)
+	{
+		m_SetConfigPath(lpszPath);
+	}
 }

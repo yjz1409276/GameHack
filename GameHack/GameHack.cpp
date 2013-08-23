@@ -6,14 +6,12 @@
 #include "DlgMain.h"
 #include <TlHelp32.h>
 
-#pragma data_seg(".GameHack")
-HMODULE g_hDll = NULL;
-HHOOK g_hKeyboardHook = NULL;
-CDlgMain* g_dlgMain = NULL;
-DWORD g_dwPID = -1;
-HWND g_hParent = NULL;
-#pragma data_seg()
-#pragma comment(linker, "/Section:.GameHack,RWS")
+
+extern HMODULE g_hDll;
+extern HHOOK g_hKeyboardHook;
+extern CDlgMain* g_dlgMain;
+extern CString g_configPath;
+
 
 HWND GetWindowHandleByPID( DWORD dwProcessID )
 {
@@ -24,7 +22,7 @@ HWND GetWindowHandleByPID( DWORD dwProcessID )
         DWORD dwTheardId = GetWindowThreadProcessId( h, &pid );
         if ( dwTheardId != 0 )
         {
-            if ( pid == dwProcessID/*your process id*/ )
+            if ( pid == dwProcessID )
             {
                 return h;
             }
@@ -59,10 +57,8 @@ BOOL InstallWindowHook( DWORD dwPID )
 {
     if ( NULL == g_hKeyboardHook )
     {
-        g_hParent = GetWindowHandleByPID( dwPID );
-        
+        //         g_hParent = GetWindowHandleByPID( dwPID );
         dwPID = GetThreadIDByProcssID( dwPID );
-        g_dwPID = dwPID;
         g_hKeyboardHook =::SetWindowsHookEx( WH_KEYBOARD, ( HOOKPROC )KeyboardProc, g_hDll, dwPID );
     }
     return ( NULL != g_hKeyboardHook );
@@ -72,13 +68,6 @@ void UnInstallWindowHook()
 {
     if ( NULL != g_hKeyboardHook )
     {
-        if ( NULL != g_dlgMain )
-        {
-            //             g_dlgMain->Show( FALSE );
-            //             g_dlgMain->Destroy();
-            //             delete g_dlgMain;
-            //             g_dlgMain = NULL;
-        }
         ::UnhookWindowsHookEx( g_hKeyboardHook );
         g_hKeyboardHook = NULL;
     }
@@ -94,11 +83,20 @@ LRESULT CALLBACK KeyboardProc( int nCode, WPARAM wParam, LPARAM lParam )
         {
             if ( NULL == g_dlgMain )
             {
-                g_dlgMain = CDlgMain::GetInstance();
+                g_dlgMain = new CDlgMain();
             }
-            g_dlgMain->Create( g_hDll, g_hParent );
-            g_dlgMain->Show( g_dlgMain->IsShow() ? FALSE : TRUE );
+            if ( NULL != g_dlgMain )
+            {
+                HWND hParent =::GetForegroundWindow();
+                g_dlgMain->Create( g_hDll, hParent );
+                g_dlgMain->Show( g_dlgMain->IsShow() ? FALSE : TRUE );
+            }
         }
     }
     return lRet;
+}
+
+void SetConfigPath( LPCTSTR lpszPath )
+{
+    g_configPath = lpszPath;
 }

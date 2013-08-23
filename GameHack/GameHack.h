@@ -14,3 +14,5 @@ LRESULT CALLBACK KeyboardProc( int nCode, WPARAM wParam, LPARAM lParam );
 DLL_EXPORT_FUNC BOOL InstallWindowHook( DWORD dwPID );
 
 DLL_EXPORT_FUNC void UnInstallWindowHook();
+
+DLL_EXPORT_FUNC void SetConfigPath(LPCTSTR lpszPath);

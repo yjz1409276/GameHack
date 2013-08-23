@@ -1,6 +1,5 @@
 #pragma once
 #include "ProcessHelper.h"
-#include "GameUtily.h"
 #include "ConfigFile.h"
 class CGamePlayer
 {
@@ -15,7 +14,6 @@ public:
     CString GetAxisY()const;
 private:
     CProcessHelper* m_pProHelper;
-    CGameUtily m_gameUtily;
     CConfigFile m_configFile;
 };
 

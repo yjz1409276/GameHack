@@ -39,9 +39,6 @@
     <ClInclude Include="GamePlayer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="GameUtily.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="IniReader.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -66,9 +63,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GamePlayer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GameUtily.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="IniReader.cpp">

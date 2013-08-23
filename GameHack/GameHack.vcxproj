@@ -85,7 +85,6 @@
     <ClInclude Include="DlgMain.h" />
     <ClInclude Include="GameHack.h" />
     <ClInclude Include="GamePlayer.h" />
-    <ClInclude Include="GameUtily.h" />
     <ClInclude Include="IniReader.h" />
     <ClInclude Include="ProcessHelper.h" />
     <ClInclude Include="resource.h" />
@@ -105,7 +104,6 @@
     </ClCompile>
     <ClCompile Include="GameHack.cpp" />
     <ClCompile Include="GamePlayer.cpp" />
-    <ClCompile Include="GameUtily.cpp" />
     <ClCompile Include="IniReader.cpp" />
     <ClCompile Include="ProcessHelper.cpp" />
     <ClCompile Include="stdafx.cpp">

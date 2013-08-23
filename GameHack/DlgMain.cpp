@@ -4,28 +4,16 @@
 #include "resource.h"
 #include "GamePlayer.h"
 
-CGamePlayer g_gamePlayer;
-CDlgMain* CDlgMain::m_pInstance = NULL;
-HWND CDlgMain::m_hDlg = NULL;
-extern CDlgMain* g_dlgMain;
+extern CGamePlayer g_gamePlayer;
 extern DWORD g_dwPID;
+extern CDlgMain* g_dlgMain;
 CDlgMain::CDlgMain( void )
 {
     m_hDlg = NULL;
 }
 
-
 CDlgMain::~CDlgMain( void )
 {
-}
-
-CDlgMain* CDlgMain::GetInstance()
-{
-    if ( NULL == m_pInstance )
-    {
-        m_pInstance = new CDlgMain();
-    }
-    return m_pInstance;
 }
 
 BOOL CDlgMain::Create( HMODULE hDll, HWND hParent )
@@ -36,34 +24,12 @@ BOOL CDlgMain::Create( HMODULE hDll, HWND hParent )
     }
     
     m_hDlg = CreateDialog( hDll, MAKEINTRESOURCE( IDD_DLG_MAIN ), hParent, ( DLGPROC )DlgProc ) ;
-    ShowWindow( m_hDlg, SW_SHOWNORMAL );
-    UpdateWindow( m_hDlg );
-    
-    BOOL bRet;
-    MSG          msg;
-    while ( ( bRet = GetMessage( &msg, NULL, 0, 0 ) ) != 0 )
-    {
-        if ( 0 == bRet )
-        {
-            break;
-        }
-        else if ( bRet == -1 )
-        {
-            // Handle the error and possibly exit
-        }
-        else if ( !IsWindow( m_hDlg ) || !IsDialogMessage( m_hDlg, &msg ) )
-        {
-            TranslateMessage( &msg );
-            DispatchMessage( &msg );
-        }
-    }
     return TRUE;
 }
 
 BOOL CDlgMain::Show( BOOL bShow/*=TRUE*/ )
 {
     return ::ShowWindow( m_hDlg, bShow ? SW_SHOWNORMAL : SW_HIDE );
-    //    return SetWindowPos( m_hDlg, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE );
 }
 
 BOOL CDlgMain::IsShow() const
@@ -85,18 +51,17 @@ INT_PTR CALLBACK  CDlgMain::DlgProc( HWND hDlg, UINT message, WPARAM wParam, LPA
         }
         case WM_CLOSE:
         {
-            DestroyWindow(hDlg);
-			m_hDlg=NULL;
+            g_dlgMain->Show( FALSE );
             return ( TRUE );
         }
         case WM_DESTROY:
         {
-            PostQuitMessage( 0 );
+            //            PostQuitMessage( 0 );
             return TRUE;
         }
         case WM_TIMER:
         {
-            TimerProc( m_hDlg, WM_TIMER, wParam, 0 );
+            TimerProc( g_dlgMain->GetHwnd(), WM_TIMER, wParam, 0 );
             return TRUE;
         }
         case WM_COMMAND:
@@ -104,12 +69,12 @@ INT_PTR CALLBACK  CDlgMain::DlgProc( HWND hDlg, UINT message, WPARAM wParam, LPA
             {
                 case IDC_START:
                 {
-                    ::SetTimer( m_hDlg, 0, 1000, NULL );
+                    ::SetTimer( g_dlgMain->GetHwnd(), 0, 1000, NULL );
                     return TRUE;
                 }
                 case IDC_STOP:
                 {
-                    ::KillTimer( m_hDlg, 0 );
+                    ::KillTimer( g_dlgMain->GetHwnd(), 0 );
                     return TRUE;
                 }
             }
@@ -120,7 +85,7 @@ INT_PTR CALLBACK  CDlgMain::DlgProc( HWND hDlg, UINT message, WPARAM wParam, LPA
 
 void CDlgMain::Destroy()
 {
-//    DestroyWindow( m_hDlg );
+    DestroyWindow( m_hDlg );
     m_hDlg = NULL;
 }
 
@@ -141,4 +106,9 @@ void CDlgMain::SetItemText( HWND hDlg, UINT itemID, LPCTSTR lpszText )
 {
     HWND hCtrl = GetDlgItem( hDlg, itemID );
     SetWindowText( hCtrl, lpszText );
+}
+
+HWND CDlgMain::GetHwnd() const
+{
+    return m_hDlg;
 }

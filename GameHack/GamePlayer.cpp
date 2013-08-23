@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GamePlayer.h"
 
-
+extern CString g_configPath;
 CGamePlayer::CGamePlayer()
 {
     m_pProHelper = NULL;
@@ -24,9 +24,7 @@ CString CGamePlayer::GetAxisX() const
 
 BOOL CGamePlayer::Init( DWORD dwPID )
 {
-    //	CString sConfigPath=m_gameUtily.GetConfigPath(_T("GameHack.ini"));
-    CString sConfigPath = _T( "G:\\GitHub\\bin\\Debug\\GameHack.ini" );
-    if ( !m_configFile.Load( sConfigPath ) )
+    if ( !m_configFile.Load( g_configPath ) )
     {
         return FALSE;
     }

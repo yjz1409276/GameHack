@@ -104,9 +104,21 @@ public:
         ::PostQuitMessage( nVal );
     }
     
+    void GetConfigPath( CString& sPath ) const
+    {
+        TCHAR sModulePath[MAX_PATH] = {0};
+        GetModuleFileName( NULL, sModulePath, MAX_PATH );
+        CString sModule = sModulePath;
+        sModule.Truncate( sModule.ReverseFind( _T( '\\' ) ) + 1 );
+        sPath = sModule + _T( "GameHack.ini" );
+    }
+    
     LRESULT OnBnClickedButton1( WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/ )
     {
-        const CString sGameName = _T( "asktao.mod" );
+        CString sConfig;
+        GetConfigPath( sConfig );
+        m_gameHelper.SetCfgPath( sConfig );
+        const CString sGameName = _T( "notepad++.exe" );
         CString sInfo;
         if ( m_gameHelper.Start( sGameName ) )
         {
