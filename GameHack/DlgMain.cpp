@@ -7,10 +7,10 @@
 extern CGamePlayer g_gamePlayer;
 extern DWORD g_dwPID;
 extern CDlgMain* g_dlgMain;
-//extern HMODULE g_hDll;
+HWND CDlgMain::m_hDlg = NULL;
 CDlgMain::CDlgMain( void )
 {
-    m_hDlg = NULL;
+
 }
 
 CDlgMain::~CDlgMain( void )
@@ -30,11 +30,19 @@ BOOL CDlgMain::Create( HMODULE hDll, HWND hParent )
 
 BOOL CDlgMain::Show( BOOL bShow/*=TRUE*/ )
 {
+    if ( !IsWindow( m_hDlg ) )
+    {
+        return FALSE;
+    }
     return ::ShowWindow( m_hDlg, bShow ? SW_SHOWNORMAL : SW_HIDE );
 }
 
 BOOL CDlgMain::IsShow() const
 {
+    if ( !IsWindow( m_hDlg ) )
+    {
+        return FALSE;
+    }
     return ::IsWindowVisible( m_hDlg );
 }
 
@@ -44,10 +52,6 @@ INT_PTR CALLBACK  CDlgMain::DlgProc( HWND hDlg, UINT message, WPARAM wParam, LPA
     {
         case WM_INITDIALOG:
         {
-            // 			HWND hParent=::GetParent(hDlg);
-            // 			CString sBuf;
-            // 			GetWindowText(hParent,sBuf.GetBuffer(),sBuf.GetLength());
-            // 			MessageBox(NULL,sBuf,sBuf,0);
             if ( !g_gamePlayer.Init( g_dwPID ) )
             {
                 return FALSE;
@@ -61,7 +65,6 @@ INT_PTR CALLBACK  CDlgMain::DlgProc( HWND hDlg, UINT message, WPARAM wParam, LPA
         }
         case WM_DESTROY:
         {
-            //            PostQuitMessage( 0 );
             return TRUE;
         }
         case WM_TIMER:
@@ -74,7 +77,7 @@ INT_PTR CALLBACK  CDlgMain::DlgProc( HWND hDlg, UINT message, WPARAM wParam, LPA
             {
                 case IDC_START:
                 {
-                    ::SetTimer( g_dlgMain->m_hDlg, 0, 1000, NULL );
+                    ::SetTimer( g_dlgMain->m_hDlg, 0, 500, NULL );
                     return TRUE;
                 }
                 case IDC_STOP:
@@ -92,6 +95,10 @@ void CDlgMain::Destroy()
 {
     if ( NULL != m_hDlg )
     {
+        if ( !IsWindow( m_hDlg ) )
+        {
+            return ;
+        }
         DestroyWindow( m_hDlg );
         m_hDlg = NULL;
     }
@@ -106,7 +113,6 @@ VOID CALLBACK CDlgMain::TimerProc( HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD
         
         SetItemText( hwnd, IDC_STATIC_AXISX, sAxisX );
         SetItemText( hwnd, IDC_STATIC_AXISY, sAxisY );
-        
     }
 }
 

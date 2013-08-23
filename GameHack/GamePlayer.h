@@ -12,6 +12,7 @@ public:
     
     CString GetAxisX()const;
     CString GetAxisY()const;
+	DWORD GetGameBase()const;
 private:
     CProcessHelper* m_pProHelper;
     CConfigFile m_configFile;

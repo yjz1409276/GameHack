@@ -106,5 +106,4 @@ LRESULT CALLBACK KeyboardProc( int nCode, WPARAM wParam, LPARAM lParam )
 void SetConfigPath( LPCTSTR lpszPath )
 {
     _tcscpy_s( g_configPath, MAX_PATH, lpszPath );
-    //    g_configPath = lpszPath;
 }

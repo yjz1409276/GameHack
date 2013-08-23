@@ -54,3 +54,12 @@ LPCTSTR CIniReader::GetIniFilePath() const
 {
     return m_IniPath;
 }
+
+DWORD CIniReader::ReadStringToHex( LPCTSTR Section, LPCTSTR key )
+{
+    LONGLONG lRet = 0;
+    TCHAR sRet[MAX_PATH] = {0};
+    GetPrivateProfileString( Section, key, 0, sRet, MAX_PATH, m_IniPath );
+    StrToInt64Ex( sRet, STIF_SUPPORT_HEX, &lRet );
+    return ( DWORD )lRet;
+}

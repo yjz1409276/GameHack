@@ -13,6 +13,7 @@ public:
     DWORD ReadDword( LPCTSTR Section, LPCTSTR key ) const;
     DOUBLE ReadDouble( LPCTSTR Section, LPCTSTR key );
     DWORD ReadString( LPCTSTR Section, LPCTSTR key, TCHAR* Buf ) const;
+    DWORD ReadStringToHex( LPCTSTR Section, LPCTSTR key );
     
     BOOL WriteDword( LPCTSTR Section, LPCTSTR key, DWORD Value );
     BOOL WriteDouble( LPCTSTR Section, LPCTSTR key, double Value );

@@ -14,16 +14,14 @@ CConfigFile::~CConfigFile( void )
 
 DWORD CConfigFile::GetAxisX() const
 {
-    DWORD dwAxisX = m_pIniReader->ReadDword( _T( "人物信息" ), _T( "AxisX" ) );
-    DWORD dwGameBase = GetGameBase();
-    return dwGameBase + dwAxisX;
+    DWORD dwAxisX = m_pIniReader->ReadStringToHex( _T( "人物信息" ), _T( "AxisX" ) );
+    return dwAxisX;
 }
 
 DWORD CConfigFile::GetAxisY() const
 {
-    DWORD dwAxisY = m_pIniReader->ReadDword( _T( "人物信息" ), _T( "AxisY" ) );
-    DWORD dwGameBase = GetGameBase();
-    return dwGameBase + dwAxisY;
+    DWORD dwAxisY = m_pIniReader->ReadStringToHex( _T( "人物信息" ), _T( "AxisY" ) );
+    return dwAxisY;
 }
 
 BOOL CConfigFile::Load( LPCTSTR lpszPath )
@@ -46,5 +44,5 @@ void CConfigFile::UnLoad()
 
 DWORD CConfigFile::GetGameBase() const
 {
-    return m_pIniReader->ReadDword( _T( "人物信息" ), _T( "GameBase" ) );
+    return m_pIniReader->ReadStringToHex( _T( "人物信息" ), _T( "GameBase" ) );
 }

@@ -14,7 +14,7 @@ CGamePlayer::~CGamePlayer( void )
 
 CString CGamePlayer::GetAxisX() const
 {
-    DWORD dwAxisX = m_configFile.GetAxisX();
+    DWORD dwAxisX = m_configFile.GetAxisX() + GetGameBase();
     DWORD dwBuf = 0;
     m_pProHelper->ReadMemory( ( LPCVOID )dwAxisX, &dwBuf, sizeof( dwBuf ) );
     CString sRet;
@@ -50,10 +50,18 @@ void CGamePlayer::UnInit()
 
 CString CGamePlayer::GetAxisY() const
 {
-    DWORD dwAxisY = m_configFile.GetAxisY();
+    DWORD dwAxisY = m_configFile.GetAxisY() + GetGameBase();
     DWORD dwBuf = 0;
     m_pProHelper->ReadMemory( ( LPCVOID )dwAxisY, &dwBuf, sizeof( dwBuf ) );
     CString sRet;
     sRet.Format( _T( "%u" ), dwBuf );
     return sRet;
+}
+
+DWORD CGamePlayer::GetGameBase() const
+{
+    DWORD dwGameBase = m_configFile.GetGameBase() + 0x00400000;
+    DWORD dwBuf = 0;
+    m_pProHelper->ReadMemory( ( LPCVOID )dwGameBase, &dwBuf, sizeof( dwBuf ) );
+    return dwBuf;
 }

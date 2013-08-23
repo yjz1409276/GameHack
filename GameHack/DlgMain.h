@@ -9,7 +9,7 @@ public:
     void Destroy();
     BOOL Show( BOOL bShow = TRUE );
     BOOL IsShow()const;
-    HWND m_hDlg;
+    static HWND m_hDlg;
 protected:
     static VOID CALLBACK TimerProc( HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime );
     static INT_PTR CALLBACK DlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam );
