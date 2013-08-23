@@ -21,7 +21,9 @@ DWORD CConfigFile::GetAxisX() const
 
 DWORD CConfigFile::GetAxisY() const
 {
-    return 0;
+    DWORD dwAxisY = m_pIniReader->ReadDword( _T( "人物信息" ), _T( "AxisY" ) );
+    DWORD dwGameBase = GetGameBase();
+    return dwGameBase + dwAxisY;
 }
 
 BOOL CConfigFile::Load( LPCTSTR lpszPath )

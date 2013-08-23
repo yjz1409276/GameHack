@@ -74,6 +74,7 @@ public:
         pLoop->RemoveMessageFilter( this );
         pLoop->RemoveIdleHandler( this );
         
+		m_gameHelper.Stop();
         m_gameHelper.UnInit();
         return 0;
     }

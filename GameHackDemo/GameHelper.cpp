@@ -47,12 +47,11 @@ BOOL CGameHelper::Start( CString sProName )
     }
     
     DWORD dwPID = GetPidFromName( sProName );
-	DWORD dwMainPID=GetThreadIDByProcssID(dwPID);
-    if ( -1 == dwMainPID )
+    if ( -1 == dwPID )
     {
         return FALSE;
     }
-    return InstallHook( dwMainPID );
+    return InstallHook( dwPID );
 }
 
 BOOL CGameHelper::Stop()

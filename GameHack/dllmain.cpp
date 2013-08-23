@@ -1,6 +1,5 @@
 // dllmain.cpp : 定义 DLL 应用程序的入口点。
 #include "stdafx.h"
-#include "GameHack.h"
 #include "DlgMain.h"
 #include "GamePlayer.h"
 
@@ -11,10 +10,10 @@ DWORD g_dwPID = -1;
 HWND g_hParent = NULL;
 HMODULE g_hDll = NULL;
 CGamePlayer g_gamePlayer;
-CString g_configPath;
+//CString g_configPath;
+TCHAR g_configPath[MAX_PATH] = {0};
 #pragma data_seg()
 #pragma comment(linker, "/Section:.GameHack,RWS")
-
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
                        LPVOID lpReserved
@@ -25,7 +24,6 @@ BOOL APIENTRY DllMain( HMODULE hModule,
         case DLL_PROCESS_ATTACH:
         {
             DisableThreadLibraryCalls( hModule );
-            
             g_hDll = hModule;
             break;
         }
@@ -41,8 +39,6 @@ BOOL APIENTRY DllMain( HMODULE hModule,
         {
             if ( NULL != g_dlgMain )
             {
-                g_dlgMain->Show( FALSE );
-                g_dlgMain->Destroy();
                 delete g_dlgMain;
                 g_dlgMain = NULL;
             }

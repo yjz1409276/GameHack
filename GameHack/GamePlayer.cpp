@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GamePlayer.h"
 
-extern CString g_configPath;
+extern TCHAR g_configPath[MAX_PATH];
 CGamePlayer::CGamePlayer()
 {
     m_pProHelper = NULL;

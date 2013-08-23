@@ -10,8 +10,8 @@
 extern HMODULE g_hDll;
 extern HHOOK g_hKeyboardHook;
 extern CDlgMain* g_dlgMain;
-extern CString g_configPath;
-
+extern TCHAR g_configPath[MAX_PATH];
+extern DWORD g_dwPID;
 
 HWND GetWindowHandleByPID( DWORD dwProcessID )
 {
@@ -57,7 +57,7 @@ BOOL InstallWindowHook( DWORD dwPID )
 {
     if ( NULL == g_hKeyboardHook )
     {
-        //         g_hParent = GetWindowHandleByPID( dwPID );
+        g_dwPID = dwPID;
         dwPID = GetThreadIDByProcssID( dwPID );
         g_hKeyboardHook =::SetWindowsHookEx( WH_KEYBOARD, ( HOOKPROC )KeyboardProc, g_hDll, dwPID );
     }
@@ -68,8 +68,15 @@ void UnInstallWindowHook()
 {
     if ( NULL != g_hKeyboardHook )
     {
+        if ( NULL != g_dlgMain )
+        {
+            g_dlgMain->Show( FALSE );
+            g_dlgMain->Destroy();
+        }
         ::UnhookWindowsHookEx( g_hKeyboardHook );
         g_hKeyboardHook = NULL;
+        
+        
     }
 }
 
@@ -87,7 +94,7 @@ LRESULT CALLBACK KeyboardProc( int nCode, WPARAM wParam, LPARAM lParam )
             }
             if ( NULL != g_dlgMain )
             {
-                HWND hParent =::GetForegroundWindow();
+                HWND hParent = GetWindowHandleByPID( g_dwPID );
                 g_dlgMain->Create( g_hDll, hParent );
                 g_dlgMain->Show( g_dlgMain->IsShow() ? FALSE : TRUE );
             }
@@ -98,5 +105,6 @@ LRESULT CALLBACK KeyboardProc( int nCode, WPARAM wParam, LPARAM lParam )
 
 void SetConfigPath( LPCTSTR lpszPath )
 {
-    g_configPath = lpszPath;
+    _tcscpy_s( g_configPath, MAX_PATH, lpszPath );
+    //    g_configPath = lpszPath;
 }

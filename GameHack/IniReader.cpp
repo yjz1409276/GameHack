@@ -7,9 +7,9 @@
 CIniReader::CIniReader( LPCTSTR lpszIniPath )
 {
     ATLASSERT( NULL != lpszIniPath );
-    memcpy_s( m_IniPath, MAX_PATH, lpszIniPath, _tcslen( lpszIniPath )*sizeof( TCHAR ) );
     ZeroMemory( m_IniPath, MAX_PATH );
     ZeroMemory( m_result, MAX_PATH );
+    _tcscpy_s( m_IniPath, MAX_PATH, lpszIniPath );
 }
 
 CIniReader::~CIniReader( void )
