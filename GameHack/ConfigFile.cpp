@@ -14,13 +14,13 @@ CConfigFile::~CConfigFile( void )
 
 DWORD CConfigFile::GetAxisX() const
 {
-    DWORD dwAxisX = m_pIniReader->ReadStringToHex( _T( "人物信息" ), _T( "AxisX" ) );
+    DWORD dwAxisX = m_pIniReader->ReadStringToHex( _T( "人物信息" ), _T( "横坐标" ) );
     return dwAxisX;
 }
 
 DWORD CConfigFile::GetAxisY() const
 {
-    DWORD dwAxisY = m_pIniReader->ReadStringToHex( _T( "人物信息" ), _T( "AxisY" ) );
+    DWORD dwAxisY = m_pIniReader->ReadStringToHex( _T( "人物信息" ), _T( "纵坐标" ) );
     return dwAxisY;
 }
 
@@ -44,5 +44,15 @@ void CConfigFile::UnLoad()
 
 DWORD CConfigFile::GetGameBase() const
 {
-    return m_pIniReader->ReadStringToHex( _T( "人物信息" ), _T( "GameBase" ) );
+    return m_pIniReader->ReadStringToHex( _T( "人物信息" ), _T( "基址" ) );
+}
+
+DWORD CConfigFile::GetPlayerName() const
+{
+	return m_pIniReader->ReadStringToHex( _T( "人物信息" ), _T( "人物名称" ) );
+}
+
+DWORD CConfigFile::GetGameModule() const
+{
+	return 0x00400000;
 }

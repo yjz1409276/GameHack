@@ -65,6 +65,7 @@ INT_PTR CALLBACK  CDlgMain::DlgProc( HWND hDlg, UINT message, WPARAM wParam, LPA
         }
         case WM_DESTROY:
         {
+			g_gamePlayer.UnInit();
             return TRUE;
         }
         case WM_TIMER:
@@ -108,11 +109,11 @@ VOID CALLBACK CDlgMain::TimerProc( HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD
 {
     if ( 0 == idEvent )
     {
-        CString sAxisX = g_gamePlayer.GetAxisX();
-        CString sAxisY = g_gamePlayer.GetAxisY();
-        
-        SetItemText( hwnd, IDC_STATIC_AXISX, sAxisX );
-        SetItemText( hwnd, IDC_STATIC_AXISY, sAxisY );
+        CString sCurAxis = g_gamePlayer.GetCurAxis();   
+        SetItemText( hwnd, IDC_STATIC_CURAXIS, sCurAxis );
+
+		CString sPlayerName=g_gamePlayer.GetPlayerName();
+		SetItemText(hwnd,IDC_STATIC_MC,sPlayerName);
     }
 }
 

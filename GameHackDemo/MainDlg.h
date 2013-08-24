@@ -120,7 +120,7 @@ public:
         GetConfigPath( sConfig );
         m_gameHelper.SetCfgPath( sConfig );
         const CString sGameName = _T( "asktao.mod" );
-//		const CString sGameName = _T( "Moon.exe" );
+//		const CString sGameName = _T( "notepad++.exe" );
         CString sInfo;
         if ( m_gameHelper.Start( sGameName ) )
         {

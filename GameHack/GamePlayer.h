@@ -10,8 +10,9 @@ public:
     BOOL Init( DWORD dwPID );
     void UnInit();
     
-    CString GetAxisX()const;
-    CString GetAxisY()const;
+	CString GetCurAxis()const;
+	CString GetPlayerName()const;
+protected:
 	DWORD GetGameBase()const;
 private:
     CProcessHelper* m_pProHelper;
